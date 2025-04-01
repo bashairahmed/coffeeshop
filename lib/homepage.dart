@@ -13,7 +13,7 @@ class Homepage extends StatelessWidget {
           children: [
                 IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_back)),
                 const SizedBox(width: 80,),
-                const Text('CoffeeS55hopcity'),
+                const Text('CoffeeShopcity'),
           
             
           ],
