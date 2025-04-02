@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings, use_key_in_widget_constructors, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -45,9 +47,9 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Coffee Menu")),
+      appBar: AppBar(title: const Text("Coffee Menu")),
       body: coffeeList.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: coffeeList.length,
               itemBuilder: (context, index) {
@@ -60,7 +62,7 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
                       height: 50,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
-                        return Icon(Icons.broken_image,
+                        return const Icon(Icons.broken_image,
                             size: 50); // عرض أيقونة عند حدوث خطأ
                       },
                     ),
