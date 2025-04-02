@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'CartScreen.dart';
 import 'ProductDetailsScreen.dart';
+
 
 void main() {
   runApp(CoffeeApp());
@@ -25,6 +27,7 @@ class CoffeeListScreen extends StatefulWidget {
 
 class _CoffeeListScreenState extends State<CoffeeListScreen> {
   List<dynamic> coffeeList = [];
+  List<Map<String, dynamic>> cart = [];
 
   @override
   void initState() {
@@ -44,13 +47,55 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
     }
   }
 
+  void addToCart(Map<String, dynamic> product) {
+    setState(() {
+      cart.add(product);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Coffee Menu",style: TextStyle(
-        color: Colors.white
-      ),),
-      backgroundColor: Colors.brown
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Coffee Menu", style: TextStyle(color: Colors.white)),
+            Stack(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.shopping_bag),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CartScreen(cart: cart, updateCart: (updatedCart) {
+                          setState(() {
+                            cart = updatedCart;
+                          });
+                        }),
+                      ),
+                    );
+                  },
+                ),
+                if (cart.isNotEmpty)
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: CircleAvatar(
+                      radius: 10,
+                      backgroundColor: Colors.red,
+                      child: Text(
+                        '${cart.length}',
+                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+        backgroundColor: Colors.brown,
       ),
       body: coffeeList.isEmpty
           ? Center(child: CircularProgressIndicator())
@@ -70,7 +115,10 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ProductDetailsScreen(product: coffee),
+                        builder: (context) => ProductDetailsScreen(
+                          product: coffee,
+                          addToCart: addToCart,
+                        ),
                       ),
                     );
                   },

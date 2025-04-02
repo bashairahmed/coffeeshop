@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ProductDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> product;
 
-  ProductDetailsScreen({required this.product});
+  ProductDetailsScreen({required this.product, required void Function(Map<String, dynamic> product) addToCart});
 
   @override
   _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
@@ -11,17 +11,19 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   int quantity = 1; // عدد الطلبات
-  double totalPrice = 0; // السعر الكلي
+  double totalPrice = 0.0; // السعر الكلي يجب أن يكون من نوع double
 
   @override
   void initState() {
     super.initState();
+    // تأكد من تحويل السعر إلى double
     totalPrice = widget.product['price'].toDouble(); // تعيين السعر الابتدائي
   }
 
   void updateTotalPrice() {
     setState(() {
-      totalPrice = widget.product['price'] * quantity;
+      // تأكد من أن quantity والسعر من نوع double
+      totalPrice = widget.product['price'].toDouble() * quantity;
     });
   }
 
