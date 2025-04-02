@@ -1,4 +1,6 @@
 // CoffeeListScreen.dart
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, prefer_interpolation_to_compose_strings
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -7,10 +9,12 @@ import 'CartScreen.dart';
 import 'ProductDetailsScreen.dart';
 
 void main() {
-  runApp(CoffeeApp());
+  runApp(const CoffeeApp());
 }
 
 class CoffeeApp extends StatelessWidget {
+  const CoffeeApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,7 +38,7 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
     super.initState();
     fetchCoffeeData();
   }
-
+    
   Future<void> fetchCoffeeData() async {
     final response = await http.get(Uri.parse('http://10.0.2.2:3000/products'));
     if (response.statusCode == 200) {
@@ -56,12 +60,16 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Coffee Menu"),
+        backgroundColor: Colors.brown,
+        title: const Text("Coffee Menu" , style: TextStyle(
+        color:  Colors.white,
+        ),),
         actions: [
           Stack(
             children: [
               IconButton(
-                icon: Icon(Icons.shopping_cart),
+                icon: const Icon(Icons.shopping_cart),
+                color: Colors.white,
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -83,7 +91,7 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
                     radius: 10,
                     backgroundColor: Colors.red,
                     child: Text('${cart.length}',
-                        style: TextStyle(fontSize: 12, color: Colors.white)),
+                        style: const TextStyle(fontSize: 12, color: Colors.white)),
                   ),
                 ),
             ],
@@ -91,10 +99,10 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
         ],
       ),
       body: coffeeList.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : GridView.builder(
-              padding: EdgeInsets.all(10),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              padding: const EdgeInsets.all(10),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
@@ -120,14 +128,15 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
                     child: Column(
                       children: [
                         Image.network('http://10.0.2.2:3000/images/' + (coffee['image'] ?? ''),
-                            height: 120, fit: BoxFit.cover),
+                        width: double.infinity,
+                            height: 150, fit: BoxFit.cover),
                         Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Column(
                             children: [
-                              Text(coffee['name'], style: TextStyle(fontWeight: FontWeight.bold)),
+                              Text(coffee['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
                               Text("${coffee['type']} - \$${coffee['price']}",
-                                  style: TextStyle(color: Colors.grey)),
+                                  style: const TextStyle(color: Colors.grey)),
                             ],
                           ),
                         ),
