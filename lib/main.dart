@@ -1,5 +1,6 @@
-// CoffeeListScreen.dart
-// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, prefer_interpolation_to_compose_strings
+
+
+// ignore_for_file: library_private_types_in_public_api, prefer_interpolation_to_compose_strings
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +18,7 @@ class CoffeeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: CoffeeListScreen(),
     );
@@ -25,7 +26,10 @@ class CoffeeApp extends StatelessWidget {
 }
 
 class CoffeeListScreen extends StatefulWidget {
+  const CoffeeListScreen({super.key});
+
   @override
+ 
   _CoffeeListScreenState createState() => _CoffeeListScreenState();
 }
 
