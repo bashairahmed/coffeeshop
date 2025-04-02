@@ -1,8 +1,8 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, use_key_in_widget_constructors, library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'ProductDetailsScreen.dart';
 
 void main() {
   runApp(CoffeeApp());
@@ -47,27 +47,76 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Coffee Menu")),
+      appBar: AppBar(title: Text("Coffee Menu",style: TextStyle(
+        color: Colors.white
+      ),),
+      backgroundColor: Colors.brown
+      ),
       body: coffeeList.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
+          ? Center(child: CircularProgressIndicator())
+          : GridView.builder(
+              padding: EdgeInsets.all(10),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 0.8,
+              ),
               itemCount: coffeeList.length,
               itemBuilder: (context, index) {
                 var coffee = coffeeList[index];
-                return Card(
-                  child: ListTile(
-                    leading: Image.network(
-                      'http://10.0.2.2:3000/images/' + coffee['image'],
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(Icons.broken_image,
-                            size: 50); // عرض أيقونة عند حدوث خطأ
-                      },
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductDetailsScreen(product: coffee),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    title: Text(coffee['name']),
-                    subtitle: Text("${coffee['type']} - \$${coffee['price']}"),
+                    elevation: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                          child: Image.network(
+                            'http://10.0.2.2:3000/images/' + (coffee['image'] ?? ''),
+                            height: 150,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                height: 120,
+                                color: Colors.grey[300],
+                                child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                              );
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                coffee['name'],
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                "${coffee['type']} - \$${coffee['price']}",
+                                style: TextStyle(color: Colors.grey[700]),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
