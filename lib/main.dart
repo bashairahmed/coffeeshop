@@ -1,10 +1,10 @@
+// CoffeeListScreen.dart
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'CartScreen.dart';
 import 'ProductDetailsScreen.dart';
-
 
 void main() {
   runApp(CoffeeApp());
@@ -37,7 +37,6 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
 
   Future<void> fetchCoffeeData() async {
     final response = await http.get(Uri.parse('http://10.0.2.2:3000/products'));
-
     if (response.statusCode == 200) {
       setState(() {
         coffeeList = json.decode(response.body);
@@ -57,45 +56,39 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Coffee Menu", style: TextStyle(color: Colors.white)),
-            Stack(
-              children: [
-                IconButton(
-                  icon: Icon(Icons.shopping_bag),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CartScreen(cart: cart, updateCart: (updatedCart) {
-                          setState(() {
-                            cart = updatedCart;
-                          });
-                        }),
-                      ),
-                    );
-                  },
-                ),
-                if (cart.isNotEmpty)
-                  Positioned(
-                    right: 8,
-                    top: 8,
-                    child: CircleAvatar(
-                      radius: 10,
-                      backgroundColor: Colors.red,
-                      child: Text(
-                        '${cart.length}',
-                        style: TextStyle(fontSize: 12, color: Colors.white),
-                      ),
+        title: Text("Coffee Menu"),
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartScreen(cart: cart, updateCart: (updatedCart) {
+                        setState(() {
+                          cart = updatedCart;
+                        });
+                      }),
                     ),
+                  );
+                },
+              ),
+              if (cart.isNotEmpty)
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: CircleAvatar(
+                    radius: 10,
+                    backgroundColor: Colors.red,
+                    child: Text('${cart.length}',
+                        style: TextStyle(fontSize: 12, color: Colors.white)),
                   ),
-              ],
-            ),
-          ],
-        ),
-        backgroundColor: Colors.brown,
+                ),
+            ],
+          ),
+        ],
       ),
       body: coffeeList.isEmpty
           ? Center(child: CircularProgressIndicator())
@@ -123,43 +116,18 @@ class _CoffeeListScreenState extends State<CoffeeListScreen> {
                     );
                   },
                   child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
                     elevation: 4,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-                          child: Image.network(
-                            'http://10.0.2.2:3000/images/' + (coffee['image'] ?? ''),
-                            height: 150,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                height: 120,
-                                color: Colors.grey[300],
-                                child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
-                              );
-                            },
-                          ),
-                        ),
+                        Image.network('http://10.0.2.2:3000/images/' + (coffee['image'] ?? ''),
+                            height: 120, fit: BoxFit.cover),
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8.0),
                           child: Column(
                             children: [
-                              Text(
-                                coffee['name'],
-                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                "${coffee['type']} - \$${coffee['price']}",
-                                style: TextStyle(color: Colors.grey[700]),
-                              ),
+                              Text(coffee['name'], style: TextStyle(fontWeight: FontWeight.bold)),
+                              Text("${coffee['type']} - \$${coffee['price']}",
+                                  style: TextStyle(color: Colors.grey)),
                             ],
                           ),
                         ),
